@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PaginationDto } from 'src/dto/pagination.dto';
+import { PaginationDto } from 'src/entities/dto/pagination.dto';
 import { ImageService } from 'src/files/image/image.service';
 import { RelationService } from 'src/relation/relation.service';
 import { Repository } from 'typeorm';

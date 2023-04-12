@@ -15,13 +15,13 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { RolesModule } from './roles/roles.module';
 import { SwapiSeederModule } from './swapi-seeder/swapi-seeder.module';
-import { HttpModule } from '@nestjs/axios';
 
 
 @Module({
   controllers: [],
   providers: [],
-  imports: [PeopleModule, PlanetsModule, FilmsModule, SpeciesModule, VehiclesModule, StarshipsModule,RelationModule,ImageModule,
+  imports: [PeopleModule, PlanetsModule, FilmsModule, SpeciesModule,
+     VehiclesModule, StarshipsModule,RelationModule,ImageModule,
     ConfigModule.forRoot({
       envFilePath: `.${process.env.NODE_ENV}.env`,
     }),

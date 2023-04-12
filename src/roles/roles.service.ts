@@ -19,7 +19,6 @@ export class RolesService {
             role.name = el;
             await this.roleRepository.save(role)
         }
-
     }
 
     async findRole(name: string) {

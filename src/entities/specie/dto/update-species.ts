@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 
-export class UpdateSpeciesDto { // extends PartialType(CreateSpeciesDto)
+export class UpdateSpeciesDto { 
 
     @ApiProperty({ example: "Human", description: "type of person" })
     name?: string;

@@ -15,12 +15,12 @@ export class RelationService {
 
   constructor(private manager: EntityManager) { }
 
-  async createRelationEntity<T>(entity: T, fields: Record<string, number | number[]>): Promise<T> {  //fields: Extract<Record<string, number[]>, T> 
+  async createRelationEntity<T>(entity: T, fields: Record<string, number | number[]>): Promise<T> {   
     for (const fieldName in fields) {
       const CurrentEntity = this.findEntityByField(fieldName);
       if (isArray(fields[fieldName])) {
         const fieldIdArray: number[] = fields[`${fieldName}`] as number[];
-        let arrayOfEntityField: ExistEntity[] = entity[fieldName] ? entity[fieldName] : []; //create unicue type like Extract type ,i can't wrap in type
+        let arrayOfEntityField: ExistEntity[] = entity[fieldName] ? entity[fieldName] : []; 
         for (const id of fieldIdArray) {
           const entityField = await this.manager.findOneBy(CurrentEntity, { id: id });
           if (entityField === null) throw new NotFoundException(`not found field ${fieldName} where id=${id}`)
@@ -43,7 +43,7 @@ export class RelationService {
       if (isArray(fields[fieldName])) {
         const field: ExistEntity[] = entity[fieldName];
         const fieldIdArray: number[] = fields[fieldName] as number[];
-        entity[fieldName] = field.filter(el => { //console.log(`id in the filter =>`, fieldIdArray.includes(el.id))
+        entity[fieldName] = field.filter(el => {
           return !fieldIdArray.includes(el.id);
         });
       } else {
@@ -53,7 +53,7 @@ export class RelationService {
       }
 
     }
-    return entity; // console.log("result save = >", entity);
+    return entity; 
   }
 
 

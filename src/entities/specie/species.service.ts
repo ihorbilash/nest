@@ -1,11 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PaginateResultDto } from 'src/dto/paginate-result.dto';
-import { PaginationDto } from 'src/dto/pagination.dto';
+import { PaginateResultDto } from 'src/entities/dto/paginate-result.dto';
+import { PaginationDto } from 'src/entities/dto/pagination.dto';
 import { ImageService } from 'src/files/image/image.service';
 import { RelationService } from 'src/relation/relation.service';
 import { Repository } from 'typeorm';
-import { CreateSpeciesDto } from './dto/create-species';
 import { RelationSpeciesDto } from './dto/relation-species';
 import { UpdateSpeciesDto } from './dto/update-species';
 import { Species } from './entities/species.entity';

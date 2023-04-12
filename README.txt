@@ -1,5 +1,3 @@
  1. npm install
- 2. npm migration:generate 
- 3. npm migration:run
- 3. npm run seed
+ 3. npm run seed(seeding from swapi.dev) or way like => npm migration:generate and npm migration:run (fill db tables)
  4. npm run start:dev

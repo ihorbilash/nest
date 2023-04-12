@@ -17,7 +17,6 @@ export class UsersService {
             return user;
       }
 
-
       async findAllUsers() {
             return await this.userRepository.find({ relations: ['role'] })
       }

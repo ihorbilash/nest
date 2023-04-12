@@ -3,7 +3,7 @@ import { Film } from "src/entities/film/entities/film.entity";
 import { Person } from "src/entities/person/entities/person.entity";
 import { Species } from "src/entities/specie/entities/species.entity";
 import { S3Image } from "src/files/image/entities/image.entity";
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: "planet" })
 export class Planet {

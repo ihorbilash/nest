@@ -21,7 +21,6 @@ const editFileName = (req, file, callback) => {
 
 
 export const interceptorOptions: MulterOptions = {
-
  /* storage: diskStorage({
     destination: 'uploads/images',
      filename: editFileName,

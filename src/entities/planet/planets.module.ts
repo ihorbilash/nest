@@ -5,10 +5,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Planet } from './entities/planet.entity';
 import { RelationService } from 'src/relation/relation.service';
 import { ImageModule } from 'src/files/image/image.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   controllers: [PlanetsController],
-  providers: [PlanetsService,RelationService],
-  imports:[TypeOrmModule.forFeature([Planet]),ImageModule]
+  providers: [PlanetsService, RelationService],
+  imports: [JwtModule,
+    TypeOrmModule.forFeature([Planet]),
+    ImageModule]
 })
-export class PlanetsModule {}
+export class PlanetsModule { }

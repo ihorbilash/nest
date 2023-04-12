@@ -1,18 +1,28 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ValidationPipe, ParseIntPipe, Put, NotFoundException, UseInterceptors, UploadedFiles } from '@nestjs/common';
+import {
+  Controller, Get, Post, Body, Patch, Param, Delete, Query,
+  ValidationPipe, ParseIntPipe, Put, NotFoundException, UseInterceptors, UploadedFiles, UseGuards
+} from '@nestjs/common';
 import { VehiclesService } from './vehicles.service';
 import { CreateVehicleDto } from './dto/create-vehicle';
 import { UpdateVehicleDto } from './dto/update-vehicle';
-import { ApiConsumes, ApiTags } from '@nestjs/swagger';
-import { PaginationDto } from 'src/dto/pagination.dto';
-import { PaginateResultDto } from 'src/dto/paginate-result.dto';
+import { ApiBearerAuth, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { PaginationDto } from 'src/entities/dto/pagination.dto';
+import { PaginateResultDto } from 'src/entities/dto/paginate-result.dto';
 import { Vehicle } from './entities/vehicle.entity';
 import { RelationVehicleDto } from './dto/relation-vehicle';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { interceptorOptions } from 'src/files/image/utils/file-upload';
 import { AddImageByIdDto } from 'src/files/image/dto/add-image.dto';
+import { RolesAccess } from 'src/roles/roles-decorator';
+import { Roles } from 'src/roles/roles.enum';
+import { RoleGuard } from 'src/roles/roles.guard';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @ApiTags('Vehicles')
 @Controller('vehicles')
+@ApiBearerAuth()
+@UseGuards(RoleGuard, JwtAuthGuard)
+@RolesAccess(Roles.ADMIN)
 export class VehiclesController {
   constructor(private readonly vehiclesService: VehiclesService) { }
 
@@ -35,12 +45,14 @@ export class VehiclesController {
   }
 
   @Get()
+  @RolesAccess(Roles.ADMIN, Roles.USER)
   findAll(@Query() paginationDto: PaginationDto): Promise<PaginateResultDto<Vehicle>> {
     paginationDto.page = paginationDto.page < 1 ? 1 : paginationDto.page;
     return this.vehiclesService.findAll({ ...paginationDto, limit: paginationDto.limit > 10 ? 10 : paginationDto.limit });
   }
 
   @Get(':id')
+  @RolesAccess(Roles.ADMIN, Roles.USER)
   findOne(@Param('id') id: string) {
     return this.vehiclesService.findOne(+id);
   }

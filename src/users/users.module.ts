@@ -6,10 +6,10 @@ import { User } from './users.entity';
 import { UsersService } from './users.service';
 
 @Module({
-  providers: [UsersService,ConfigService],
+  providers: [UsersService, ConfigService],
   controllers: [],
   imports: [
-    forwardRef(()=>AuthModule),
+    forwardRef(() => AuthModule),
     TypeOrmModule.forFeature([User])
   ],
   exports: [UsersService]

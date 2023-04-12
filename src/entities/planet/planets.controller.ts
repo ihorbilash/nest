@@ -1,18 +1,29 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Put, NotFoundException, ParseIntPipe, ValidationPipe, UseInterceptors, UploadedFiles } from '@nestjs/common';
+import {
+  Controller, Get, Post, Body, Patch, Param, Delete, Query, Put, NotFoundException,
+  ParseIntPipe, ValidationPipe, UseInterceptors, UploadedFiles, UseGuards
+} from '@nestjs/common';
 import { PlanetsService } from './planets.service';
 import { CreatePlanetDto } from './dto/create-planet';
 import { UpdatePlanetDto } from './dto/update-planet';
-import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
-import { PaginationDto } from 'src/dto/pagination.dto';
-import { PaginateResultDto } from 'src/dto/paginate-result.dto';
+import { ApiBearerAuth, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { PaginationDto } from 'src/entities/dto/pagination.dto';
+import { PaginateResultDto } from 'src/entities/dto/paginate-result.dto';
 import { Planet } from './entities/planet.entity';
 import { RelationPlanetDto } from './dto/relation-planet';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { interceptorOptions } from 'src/files/image/utils/file-upload';
 import { AddImageByIdDto } from 'src/files/image/dto/add-image.dto';
+import { RoleGuard } from 'src/roles/roles.guard';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { RolesAccess } from 'src/roles/roles-decorator';
+import { Roles } from 'src/roles/roles.enum';
+import { Role } from 'src/roles/roles.entity';
 
 @ApiTags('Planet')
 @Controller('planets')
+@ApiBearerAuth()
+@UseGuards(RoleGuard, JwtAuthGuard)
+@RolesAccess(Roles.ADMIN)
 export class PlanetsController {
   constructor(private readonly planetsService: PlanetsService) { }
 
@@ -36,12 +47,14 @@ export class PlanetsController {
   }
 
   @Get()
+  @RolesAccess(Roles.ADMIN, Roles.USER)
   findAll(@Query() paginationDto: PaginationDto): Promise<PaginateResultDto<Planet>> {
     paginationDto.page = paginationDto.page < 1 ? 1 : paginationDto.page;
     return this.planetsService.findAll({ ...paginationDto, limit: paginationDto.limit > 10 ? 10 : paginationDto.limit });
   }
 
   @Get(':id')
+  @RolesAccess(Roles.ADMIN, Roles.USER)
   findOne(@Param('id') id: string) {
     return this.planetsService.findOne(+id);
   }

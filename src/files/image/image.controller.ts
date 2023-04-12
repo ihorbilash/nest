@@ -1,9 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
+import { Controller, Param, Delete, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { ImageService } from './image.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { RoleGuard } from 'src/roles/roles.guard';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { RolesAccess } from 'src/roles/roles-decorator';
+import { Roles } from 'src/roles/roles.enum';
 
 @ApiTags('delete-images')
 @Controller('image')
+@ApiBearerAuth()
+@UseGuards(RoleGuard,JwtAuthGuard)
+@RolesAccess(Roles.ADMIN)
 export class ImageController {
   constructor(private readonly imageService: ImageService) { }
 

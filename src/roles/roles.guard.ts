@@ -8,7 +8,7 @@ import { ROLES_KEY } from "./roles-decorator";
 @Injectable()
 export class RoleGuard implements CanActivate {
   constructor(private reflector: Reflector,
-    private jwtService:JwtService
+    private jwtService: JwtService
   ) { }
 
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
@@ -23,9 +23,8 @@ export class RoleGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const token = request.headers.authorization.split(' ')[1]
     if (token) {
-     let user = this.jwtService.decode(token) as AuthUserDto;
+      let user = this.jwtService.decode(token) as AuthUserDto;
       return requiredRoles.some((role) => user.role.name?.includes(role));
-     
     }
   }
 }

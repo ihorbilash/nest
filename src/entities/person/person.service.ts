@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PaginateResultDto } from 'src/dto/paginate-result.dto';
-import { PaginationDto } from 'src/dto/pagination.dto';
+import { PaginateResultDto } from 'src/entities/dto/paginate-result.dto';
+import { PaginationDto } from 'src/entities/dto/pagination.dto';
 import { ImageService } from 'src/files/image/image.service';
 import { RelationService } from 'src/relation/relation.service';
 import { Repository } from 'typeorm';
@@ -78,7 +78,6 @@ export class PersonService {
   async createRelation(person: Person, entitiesId: RelationPersonDto): Promise<Person> {
     const result = await this.relationService.createRelationEntity(person, { ...entitiesId })
     Object.assign(person, result);
-    //console.log('this first =>', person);
     await this.personRepository.save(person)
     return person;
   }
@@ -87,7 +86,7 @@ export class PersonService {
     const result = await this.relationService.removeRelations(person, { ...entitiesId });
     Object.assign(person, result);
     await this.personRepository.save(person)
-    return person
+    return person;
   }
 
 }

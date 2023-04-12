@@ -1,8 +1,6 @@
 
-import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { config } from 'aws-sdk';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './utility/filters/http-exception.filter';
 import { NotFoundExceptionFilter } from './utility/filters/not-found-exception.filter';
@@ -14,7 +12,7 @@ async function bootstrap() {
     .setTitle('StarWar example')
     .setDescription('The starwar API description')
     .setVersion('1.0')
-    .addTag('cats')
+    .addTag('StarWars')
     .addBearerAuth({
       type: 'http',
       scheme: 'bearer',
@@ -23,7 +21,8 @@ async function bootstrap() {
     .build();
 
     
-  app.useGlobalFilters(new HttpExceptionFilter(), new NotFoundExceptionFilter());
+  app.useGlobalFilters(new HttpExceptionFilter(),
+   new NotFoundExceptionFilter());
   
   const document = SwaggerModule.createDocument(app, configSwager);
   SwaggerModule.setup('api', app, document);

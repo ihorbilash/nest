@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Put, Query, ValidationPipe, UsePipes, NotFoundException, UseInterceptors, UploadedFiles, UseGuards, } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, ParseIntPipe, Put, Query, ValidationPipe, 
+  NotFoundException, UseInterceptors, UploadedFiles, UseGuards, } from '@nestjs/common';
 import { PersonService } from './person.service';
 import { CreatePersonDto } from './dto/create-person';
 import { UpdatePersonDto } from './dto/update-person';
-import { ApiBearerAuth, ApiBody, ApiConsumes, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { PaginationDto } from 'src/dto/pagination.dto';
-import { PaginateResultDto } from 'src/dto/paginate-result.dto';
+import { ApiBearerAuth, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { PaginationDto } from 'src/entities/dto/pagination.dto';
+import { PaginateResultDto } from 'src/entities/dto/paginate-result.dto';
 import { Person } from './entities/person.entity';
 import { RelationPersonDto } from './dto/relation-person';
 import { FilesInterceptor } from '@nestjs/platform-express';
@@ -14,8 +15,6 @@ import { RolesAccess } from 'src/roles/roles-decorator';
 import { Roles } from 'src/roles/roles.enum';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RoleGuard } from 'src/roles/roles.guard';
-
-
 
 
 @ApiTags('Person')

@@ -1,18 +1,28 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Put, NotFoundException, ParseIntPipe, ValidationPipe, UseInterceptors, UploadedFiles } from '@nestjs/common';
+import {
+  Controller, Get, Post, Body, Patch, Param, Delete, Query, Put,
+  NotFoundException, ParseIntPipe, ValidationPipe, UseInterceptors, UploadedFiles, UseGuards
+} from '@nestjs/common';
 import { StarshipsService } from './starships.service';
 import { CreateStarshipDto } from './dto/create-starship';
 import { UpdateStarshipDto } from './dto/update-starship';
-import { ApiConsumes, ApiTags } from '@nestjs/swagger';
-import { PaginationDto } from 'src/dto/pagination.dto';
-import { PaginateResultDto } from 'src/dto/paginate-result.dto';
+import { ApiBearerAuth, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { PaginationDto } from 'src/entities/dto/pagination.dto';
+import { PaginateResultDto } from 'src/entities/dto/paginate-result.dto';
 import { Starship } from './entities/starship.entity';
 import { RelationStarshipsDto } from './dto/relation-starship';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { interceptorOptions } from 'src/files/image/utils/file-upload';
 import { AddImageByIdDto } from 'src/files/image/dto/add-image.dto';
+import { RoleGuard } from 'src/roles/roles.guard';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { RolesAccess } from 'src/roles/roles-decorator';
+import { Roles } from 'src/roles/roles.enum';
 
 @ApiTags('Starships')
 @Controller('starships')
+@ApiBearerAuth()
+@UseGuards(RoleGuard, JwtAuthGuard)
+@RolesAccess(Roles.ADMIN)
 export class StarshipsController {
   constructor(private readonly starshipsService: StarshipsService) { }
 
@@ -35,12 +45,14 @@ export class StarshipsController {
   }
 
   @Get()
+  @RolesAccess(Roles.ADMIN, Roles.USER)
   findAll(@Query() paginationDto: PaginationDto): Promise<PaginateResultDto<Starship>> {
     paginationDto.page = paginationDto.page > 1 ? 1 : paginationDto.page;
     return this.starshipsService.findAll({ ...paginationDto, limit: paginationDto.limit > 10 ? 10 : paginationDto.limit });
   }
 
   @Get(':id')
+  @RolesAccess(Roles.ADMIN, Roles.USER)
   findOne(@Param('id') id: string) {
     return this.starshipsService.findOne(+id);
   }
@@ -62,6 +74,7 @@ export class StarshipsController {
     return this.starshipsService.createRelation(filmEntity, entitiesId)
 
   }
+  
   @Put('remove-relation/:id')
   async removeRelation(@Param('id', ParseIntPipe) id: number, @Body(ValidationPipe) entitiesIdDto: RelationStarshipsDto) {
     const filmEntity = await this.starshipsService.findOne(id);

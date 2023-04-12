@@ -56,24 +56,31 @@ export class ImageService {
     });
   }
 
-  //--------------------------------------------------------------------------------local storage
-
-  create(images: any) {                    // ------------------------------- here any
-    let arrayOfImage: S3Image[] = []
-    images.map(async el => {
-      let imageToSave = new S3Image()
-      imageToSave.key = el.Key;
-      //  const images =await this.imageRepository.save(imageToSave); // const image = this.manager.save(Image,imageToSave) 
-      arrayOfImage.push(imageToSave)
-    })
-    return arrayOfImage;
-  }
 
   async remove(id: number) {
     const image = await this.imageRepository.findOne({ where: { id } })
     if (image === null) throw new NotFoundException(`not found film entity where id=${id}`);
-    await this.imageRepository.remove(image);
-    return image;
+    //await this.imageRepository.remove(image);
+    //from s3
+    const s3 = this.getS3();
+    console.log('key s3=>', image.key)
+    const params = {
+      Bucket: this.configService.get('AWS_BUCKET_NAME'),
+      Key: image.key,
+    };
+    const s3Response = await new Promise((resolve, reject) => {
+      s3.deleteObject(params, (err, data) => {
+        if (err) {
+          Logger.error(err);
+          reject(err.message);
+        } else {
+          console.log('Image deleted successfully');
+          resolve(data);
+        }
+      });
+    });
+
+    return { image, s3Response };
   }
 
 

@@ -2,7 +2,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 
-export class UpdateVehicleDto  { // extends PartialType(CreateVehicleDto)
+export class UpdateVehicleDto  { 
 
     @ApiProperty({ example: "Snowspeeder", description: "name of Vehicle" })
     name?: string;
