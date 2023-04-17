@@ -39,7 +39,6 @@ export class AuthService {
         let new_user = new User();
         new_user.username = registerUserDto.username;
         new_user.hash_password = hash_password;
-        console.log('new role user=>', registerUserDto.role)
         const role = await this.roleService.findRole(registerUserDto.role);  
         new_user.role = role;
         //-----

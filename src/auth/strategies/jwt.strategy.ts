@@ -17,7 +17,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         });
     }
 
-
     async validate(authUserDto: AuthUserDto) {
         console.log('jwt validate=>', authUserDto)
         return authUserDto;
